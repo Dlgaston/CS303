@@ -12,6 +12,16 @@ class DGVector {
     int cur_capacity{};
     T* data;
 
+  // Logic behind recursive function. If pos is less than size, then it returns negative one if not found.
+  static int findLastIndexOf(const DGVector& items, const T& item, size_t pos_last) {
+    if (pos_last == -1) {
+      return -1;
+    }
+    if (item == items[pos_last]) {
+      return pos_last;
+    }
+    return findLastIndexOf(items, item, pos_last-1);
+  }
   public:
   // Default constructor
   DGVector() : cur_size(0), cur_capacity(INITIAL_CAPACITY), data(new T[INITIAL_CAPACITY]) {}
@@ -114,10 +124,15 @@ class DGVector {
   }
 
   // Fix validateIndex to throw exceptions properly
-  void validateIndex(int index) {
+  void validateIndex(int index) const {
     if (index >= cur_size || index < 0) {
       throw std::out_of_range("Index is out of range");
     }
+  }
+
+  // Public entry for the user to find item.
+  static int findLastIndexOfItem(const DGVector& items, const T& item)   {
+    return findLastIndexOf(items, item, items.getSize() -1);
   }
 
   void print() {
